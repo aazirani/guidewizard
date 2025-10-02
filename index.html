@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Wizard - Personalized Step-by-Step Guidance Platform</title>
+    <meta name="description" content="Guide Wizard provides personalized, step-by-step guidance through complex processes with intelligent logic-based content delivery and multilingual support.">
+    <meta name="keywords" content="guide creation, personalized guidance, step-by-step instructions, adaptive content, flutter app, backend API, logic engine">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Guide Wizard - Personalized Step-by-Step Guidance Platform">
+    <meta property="og:description" content="Open-source platform for creating personalized guides with intelligent logic-based content delivery.">
+    <meta property="og:type" content="website">
+
+    <!-- CSS and Fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --bg-tertiary: #3a3a3a;
+            --border-color: #4a4a4a;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent-primary: #ffffff;
+            --accent-secondary: #d0d0d0;
+            --accent-gray: #808080;
+            --button-bg: #3a3a3a;
+            --button-hover: #4a4a4a;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-dark);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            padding: 140px 0 80px;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff, #b0b0b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            margin-bottom: 2.5rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #1a1a1a;
+            border-color: transparent;
+        }
+
+        .btn-primary:hover {
+            background: #e0e0e0;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--button-hover);
+            border-color: var(--text-secondary);
+        }
+
+        .repo-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .repo-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .repo-btn:hover {
+            background: var(--button-hover);
+            border-color: var(--text-secondary);
+        }
+
+        .repo-btn i {
+            font-size: 1.2rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-alt {
+            background: var(--bg-secondary);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--text-secondary);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+
+        .feature-card h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .subsection-title {
+            text-align: center;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        /* Technology Stack */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .tech-item {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .tech-item:hover {
+            border-color: var(--text-secondary);
+        }
+
+        .tech-item i {
+            font-size: 2.5rem;
+            color: #b0b0b0;
+            margin-bottom: 1rem;
+        }
+
+        .tech-item h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-item p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Repository Cards */
+        .repo-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .repo-card {
+            background: var(--bg-tertiary);
+            padding: 2.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .repo-card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .repo-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .repo-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-tag {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 3rem 0 1.5rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .footer-bottom a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .repo-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid, .tech-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-compass"></i> Guide Wizard
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#technology">Technology</a></li>
+                <li><a href="#repositories">Repositories</a></li>
+                <li><a href="https://aminazirani.com" target="_blank">Creator</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Guide Wizard</h1>
+            <p>Open-source platform for creating personalized, step-by-step guides with intelligent logic-based content delivery and multilingual support</p>
+            <div class="cta-buttons">
+                <a href="#repositories" class="btn btn-primary">
+                    <i class="fab fa-github"></i> View Repositories
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <i class="fas fa-rocket"></i> Explore Features
+                </a>
+            </div>
+
+            <!-- Repository Links -->
+            <div class="repo-links">
+                <a href="https://github.com/aazirani/guide_wizard" target="_blank" class="repo-btn">
+                    <i class="fab fa-github"></i> Flutter App Repository
+                </a>
+                <a href="https://github.com/aazirani/guide_wizard_backend" target="_blank" class="repo-btn">
+                    <i class="fab fa-github"></i> Backend Repository
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Platform Features</h2>
+                <p>Complete ecosystem with mobile app and backend management system</p>
+            </div>
+
+            <!-- Mobile App Features -->
+            <div style="margin-bottom: 5rem;">
+                <h3 class="subsection-title">
+                    <i class="fas fa-mobile-alt" style="color: #ffffff;"></i>
+                    Mobile App Features
+                </h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h3>Personalized Guidance</h3>
+                        <p>Dynamic content adaptation based on user profile and answers with intelligent logic evaluation</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <h3>Step-by-Step Navigation</h3>
+                        <p>Intuitive wizard-style interface guiding users through multi-step processes</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Intelligent Logic System</h3>
+                        <p>Content personalization using expression-based conditional logic</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h3>Multilingual Support</h3>
+                        <p>Full internationalization with dynamic language switching</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud-download-alt"></i>
+                        </div>
+                        <h3>Offline Capability</h3>
+                        <p>Local database caching for offline access to downloaded content</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3>Task Management</h3>
+                        <p>Track progress through checklists and subtasks with visual indicators</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backend Features -->
+            <div>
+                <h3 class="subsection-title">
+                    <i class="fas fa-server" style="color: #b0b0b0;"></i>
+                    Backend Management System
+                </h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Intelligent Logic Engine</h3>
+                        <p>Advanced logic evaluation system processing user answers through complex expressions</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3>Content Management</h3>
+                        <p>Comprehensive admin interface for managing steps, questions, tasks, and answers</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3>Translation Management</h3>
+                        <p>Sophisticated multilingual content system with technical name mapping</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-api"></i>
+                        </div>
+                        <h3>RESTful API</h3>
+                        <p>Well-designed API endpoints for content delivery and personalization</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Security & Access Control</h3>
+                        <p>Role-based access control with authentication middleware and audit trails</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-docker"></i>
+                        </div>
+                        <h3>Docker Setup</h3>
+                        <p>Easy deployment with Docker containers and automated installation scripts</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack -->
+    <section id="technology" class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <h2>Technology Stack</h2>
+                <p>Built with modern technologies and best practices</p>
+            </div>
+
+            <!-- Mobile Technologies -->
+            <div style="margin-bottom: 4rem;">
+                <h3 class="subsection-title">
+                    <i class="fas fa-mobile-alt" style="color: #ffffff;"></i>
+                    Mobile App Technologies
+                </h3>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h4>Flutter Framework</h4>
+                        <p>Cross-platform development for iOS, Android, and Web</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-sync-alt"></i>
+                        <h4>MobX State Management</h4>
+                        <p>Reactive state management with observable patterns</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-database"></i>
+                        <h4>Sembast Database</h4>
+                        <p>Local NoSQL database for offline storage</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-code"></i>
+                        <h4>Clean Architecture</h4>
+                        <p>Separation of concerns with layered design</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backend Technologies -->
+            <div>
+                <h3 class="subsection-title">
+                    <i class="fas fa-server" style="color: #b0b0b0;"></i>
+                    Backend Technologies
+                </h3>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <i class="fab fa-php"></i>
+                        <h4>UserFrosting 4.6</h4>
+                        <p>Modern PHP framework with sprinkle architecture</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-database"></i>
+                        <h4>MySQL + Eloquent ORM</h4>
+                        <p>Relational database with elegant ORM</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-plug"></i>
+                        <h4>RESTful API</h4>
+                        <p>Well-architected API endpoints with JSON responses</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-docker"></i>
+                        <h4>Docker</h4>
+                        <p>Containerized deployment with Docker Compose</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Repositories Section -->
+    <section id="repositories" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Open Source Repositories</h2>
+                <p>Explore the complete platform with comprehensive documentation</p>
+            </div>
+
+            <div class="repo-cards">
+                <!-- Flutter App Repository -->
+                <div class="repo-card">
+                    <div class="repo-card-icon" style="color: #ffffff;">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Flutter Mobile App</h3>
+                    <p>Complete Flutter application with adaptive content delivery, multilingual support, and offline-first architecture</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Flutter</span>
+                        <span class="tech-tag">MobX</span>
+                        <span class="tech-tag">Sembast</span>
+                        <span class="tech-tag">Clean Architecture</span>
+                    </div>
+                    <a href="https://github.com/aazirani/guide_wizard" target="_blank" class="btn btn-primary">
+                        <i class="fab fa-github"></i> View Repository
+                    </a>
+                </div>
+
+                <!-- Backend Repository -->
+                <div class="repo-card">
+                    <div class="repo-card-icon" style="color: #b0b0b0;">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Backend API System</h3>
+                    <p>UserFrosting 4.6 sprinkle with intelligent logic engine, content management system, and RESTful API</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">UserFrosting 4.6</span>
+                        <span class="tech-tag">PHP</span>
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">Docker</span>
+                    </div>
+                    <a href="https://github.com/aazirani/guide_wizard_backend" target="_blank" class="btn btn-primary">
+                        <i class="fab fa-github"></i> View Repository
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#features">Features</a>
+                <a href="#technology">Technology</a>
+                <a href="#repositories">Repositories</a>
+                <a href="https://github.com/aazirani/guide_wizard" target="_blank">
+                    <i class="fab fa-github"></i> Flutter App
+                </a>
+                <a href="https://github.com/aazirani/guide_wizard_backend" target="_blank">
+                    <i class="fab fa-github"></i> Backend
+                </a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Guide Wizard by <a href="https://aminazirani.com" target="_blank">Amin Azirani</a>. Open source under MIT License.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">Creating personalized guidance experiences for everyone.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Navbar enhancement on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(13, 17, 23, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(13, 17, 23, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
